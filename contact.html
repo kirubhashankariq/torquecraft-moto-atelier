@@ -95,8 +95,32 @@
                 </div>
             </a>
             <div
-                class="hidden lg:flex items-center gap-4 xl:gap-6 font-display text-sm xl:text-lg tracking-widest font-medium opacity-80">
-                <a href="index.html" class="hover:text-copper transition-colors uppercase">HOME</a>
+                class="hidden xl:flex items-center gap-4 xl:gap-6 font-display text-sm xl:text-lg tracking-widest font-medium opacity-80">
+                <div class="relative group py-2">
+                    <button
+                        class="hover:text-copper transition-colors flex items-center gap-1 uppercase outline-none">
+                        HOME
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div
+                        class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                        <div
+                            class="p-2 flex flex-col gap-1 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 shadow-xl rounded-2xl">
+                            <a href="index.html"
+                                class="px-4 py-3 hover:bg-obsidian/5 dark:hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-obsidian dark:text-ivory hover:text-copper opacity-70 hover:opacity-100">
+                                Home Page 1
+                            </a>
+                            <a href="home-performance.html"
+                                class="px-4 py-3 hover:bg-obsidian/5 dark:hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-obsidian dark:text-ivory hover:text-copper opacity-70 hover:opacity-100">
+                                Home Page 2
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <a href="about.html" class="hover:text-copper transition-colors uppercase">ABOUT US</a>
                 <a href="services.html" class="hover:text-copper transition-colors uppercase">SERVICES</a>
                 <a href="pricing.html" class="hover:text-copper transition-colors uppercase">PRICING</a>
@@ -146,7 +170,12 @@
             </svg>
         </button>
         <div class="flex flex-col items-center justify-start min-h-full py-8 w-full gap-6">
-            <a href="index.html" class="hover:text-copper transition-colors">HOME</a>
+            <div class="flex flex-col items-center gap-2 mb-2 w-full border-b border-white/10 pb-6 text-center">
+                <span class="text-white opacity-50 text-xl tracking-widest mb-2">HOME PAGES</span>
+                <a href="index.html" class="text-2xl text-gray-400 hover:text-white transition-colors">Home Page 1</a>
+                <a href="home-performance.html" class="text-2xl text-gray-400 hover:text-white transition-colors">Home
+                    Page 2</a>
+            </div>
             <a href="about.html" class="hover:text-copper transition-colors">ABOUT US</a>
             <a href="services.html" class="hover:text-copper transition-colors">SERVICES</a>
             <a href="pricing.html" class="hover:text-copper transition-colors">PRICING</a>
