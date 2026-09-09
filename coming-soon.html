@@ -1,0 +1,28 @@
+<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coming Soon — TorqueCraft</title>
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z' fill='none' stroke='%23FF5A1F' stroke-width='8'/><path d='M35 40 H65 V52 H54 V75 H46 V52 H35 Z' fill='%23FF5A1F'/></svg>"><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{copper:"#FF5A1F"}}}};</script><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/rtl.css"><!-- Anti-Flash Dark Mode Script & Premium Page Fade -->
+    <script>
+        // Execute strictly BEFORE the body renders to prevent the white flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        /* Premium Smooth Page Load Transition */
+        body {
+            animation: fadeInPage 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            /* Force the background color instantly to prevent CSS lag */
+            background-color: #F5F0E8; 
+            transition: background-color 0.5s ease;
+        }
+        html.dark body {
+            background-color: #050608;
+        }
+        @keyframes fadeInPage {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head><body class="antialiased selection:bg-copper selection:text-obsidian relative w-full overflow-x-hidden bg-ivory text-obsidian dark:bg-obsidian dark:text-ivory transition-colors duration-500"> class="noise bg-obsidian text-ivory"><div class="progress"></div><div class="loader"><div class="discspin"></div></div><section class="min-h-screen relative grid place-items-center text-center px-5"><div class="absolute inset-0 bg-cover bg-center" style="background-image:url(https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=2200&q=88)"></div><div class="absolute inset-0 bg-black/75"></div><div class="relative z-10"><div class="kicker">GARAGE DOORS CLOSED / TEMPORARILY</div><h1 class="display-lg mt-4">SOMETHING<br><span class="copper">FAST.</span></h1><p class="muted max-w-xl mx-auto mt-5">We are calibrating the next release of the TorqueCraft digital atelier.</p><div class="flex justify-center gap-2 mt-8"><div class="glass p-5"><div class="stat">07</div><div class="technical">DAYS</div></div><div class="glass p-5"><div class="stat">12</div><div class="technical">HOURS</div></div><div class="glass p-5"><div class="stat">42</div><div class="technical">MIN</div></div></div><form data-demo data-success="We will notify you at launch." class="max-w-md mx-auto flex gap-2 mt-8"><input class="input" required type="email" placeholder="Email address"><button class="btn primary" type="submit">NOTIFY ME</button></form><a class="btn mt-6" href="index.html">RETURN HOME</a></div></section><div class="toast"><div class="kicker">SYSTEM MESSAGE</div><div data-toast></div></div><script src="assets/js/main.js"></script></body></html>

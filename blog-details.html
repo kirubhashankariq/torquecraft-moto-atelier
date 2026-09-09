@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TorqueCraft | The Atelier Log</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z' fill='none' stroke='%23FF5A1F' stroke-width='8'/><path d='M35 40 H65 V52 H54 V75 H46 V52 H35 Z' fill='%23FF5A1F'/></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { obsidian: '#050608', gunmetal: '#12151A', ivory: '#F5F0E8', copper: '#FF5A1F' },
+                    maxWidth: { 'atelier': '1440px' }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        .article-body p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            opacity: 0.85;
+            font-size: 1.125rem;
+        }
+
+        .article-body h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .article-body blockquote {
+            border-left: 4px solid #FF5A1F;
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-size: 1.25rem;
+            margin: 2rem 0;
+            background: rgba(255, 90, 31, 0.05);
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        .article-body ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .article-body ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.85;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .article-body ul li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #FF5A1F;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .search-box {
+            background-color: transparent;
+            color: inherit;
+            border: 1px solid rgba(255, 90, 31, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #FF5A1F;
+            box-shadow: 0 0 15px rgba(255, 90, 31, 0.2);
+            outline: none;
+        }
+
+        /* FIXED: Fade-in without 'transform' so the Fixed Navbar stays perfectly in place */
+        body {
+            animation: fadeInPage 0.6s ease-out forwards;
+            background-color: #F5F0E8;
+            transition: background-color 0.5s ease;
+        }
+
+        html.dark body {
+            background-color: #050608;
+        }
+
+        @keyframes fadeInPage {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .text-outline {
+            color: transparent !important;
+            -webkit-text-stroke: 1px #050608 !important;
+        }
+
+        html.dark .text-outline {
+            -webkit-text-stroke: 1px #F5F0E8 !important;
+        }
+    </style>
+
+    <!-- Anti-Flash Dark Mode Script -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body
+    class="antialiased selection:bg-copper selection:text-obsidian relative w-full overflow-x-hidden bg-ivory text-obsidian dark:bg-obsidian dark:text-ivory transition-colors duration-500 m-0 p-0">
+
+    <!-- FIXED: Canvas spans the entire viewport perfectly without zooming -->
+    <canvas id="particle-canvas" class="fixed top-0 left-0 pointer-events-none -z-10"
+        style="width: 100vw; height: 100vh;"></canvas>
+
+    <!-- HEADER: Advanced Universal Navigation -->
+    <header class="fixed w-full top-0 z-50 px-4 md:px-6 lg:px-8 mt-4 md:mt-6">
+        <nav
+            class="max-w-atelier mx-auto py-3 md:py-4 px-5 md:px-8 flex justify-between items-center bg-white dark:bg-obsidian text-obsidian dark:text-ivory border border-obsidian/10 dark:border-ivory/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-all duration-500 rounded-full">
+
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center gap-3 text-inherit shrink-0 group">
+                <svg viewBox="0 0 100 100"
+                    class="h-8 md:h-10 w-auto group-hover:scale-105 transition-transform duration-300">
+                    <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none" stroke="currentColor"
+                        stroke-width="6" stroke-linejoin="round" />
+                    <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="currentColor" fill-opacity="0.1"
+                        stroke="currentColor" stroke-width="2" />
+                    <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="#FF5A1F" />
+                </svg>
+                <div class="flex flex-col">
+                    <span
+                        class="font-display font-medium text-lg md:text-2xl tracking-wide leading-none">TORQUECRAFT</span>
+                    <span
+                        class="font-display font-medium text-[7px] md:text-[9px] tracking-widest text-copper uppercase mt-1">Moto
+                        Atelier</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <div
+                class="hidden lg:flex items-center gap-4 xl:gap-6 font-display text-sm xl:text-lg tracking-widest font-medium opacity-80">
+                <div class="relative group py-2">
+                    <button class="hover:text-copper transition-colors flex items-center gap-1 uppercase outline-none">
+                        HOME
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div
+                        class="absolute top-full left-0 mt-4 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        <div
+                            class="p-2 flex flex-col gap-1 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 shadow-xl rounded-2xl">
+                            <a href="index.html"
+                                class="px-4 py-3 hover:bg-obsidian/5 dark:hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-obsidian dark:text-ivory hover:text-copper opacity-70 hover:opacity-100">
+                                Home Page 1
+                            </a>
+                            <a href="home-performance.html"
+                                class="px-4 py-3 hover:bg-obsidian/5 dark:hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-obsidian dark:text-ivory hover:text-copper opacity-70 hover:opacity-100">
+                                Home Page 2
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="about.html" class="hover:text-copper transition-colors uppercase">ABOUT US</a>
+                <a href="services.html" class="hover:text-copper transition-colors uppercase">SERVICES</a>
+                <a href="pricing.html" class="hover:text-copper transition-colors uppercase">PRICING</a>
+                <a href="reviews.html" class="hover:text-copper transition-colors uppercase">REVIEWS</a>
+                <a href="blog.html"
+                    class="text-copper drop-shadow-[0_0_8px_rgba(255,90,31,0.8)] transition-colors uppercase">BLOG</a>
+                <a href="contact.html" class="hover:text-copper transition-colors uppercase">CONTACT</a>
+            </div>
+
+            <!-- UI Toggles & CTA Buttons (Desktop) -->
+            <div class="hidden xl:flex items-center gap-4 xl:gap-6 shrink-0">
+                <button id="rtl-toggle"
+                    class="font-display text-xs md:text-sm tracking-widest hover:text-copper transition-colors border border-inherit px-2 py-1 rounded opacity-70">RTL</button>
+                <button id="theme-toggle" class="hover:text-copper transition-colors opacity-70"
+                    aria-label="Toggle Theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-5 h-5 md:w-6 md:h-6">
+                        <path
+                            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z">
+                        </path>
+                    </svg>
+                </button>
+                <a href="signin.html"
+                    class="font-display text-sm xl:text-lg tracking-widest hover:text-copper transition-colors font-medium opacity-80 uppercase">SIGN
+                    IN</a>
+                <a href="signup.html"
+                    class="magnetic-btn btn-neon font-display text-sm md:text-lg xl:text-xl tracking-wider px-6 md:px-8 py-2 md:py-2.5 rounded-full flex items-center font-medium text-obsidian bg-copper border-0">
+                    BOOK A SERVICE
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" class="xl:hidden text-inherit p-2 hover:text-copper transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- BULLETPROOF Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed top-0 left-0 w-full h-full bg-obsidian/98 dark:bg-obsidian/98 backdrop-blur-3xl z-[100] opacity-0 invisible pointer-events-none transition-all duration-500 overflow-y-auto flex flex-col justify-start py-20 px-6 gap-6 font-display text-2xl tracking-wide text-white">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-white hover:text-copper p-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="flex flex-col items-center justify-start min-h-full py-8 w-full gap-6">
+            <div class="flex flex-col items-center gap-2 mb-2 w-full border-b border-white/10 pb-6 text-center">
+                <span class="text-white opacity-50 text-xl tracking-widest mb-2">HOME PAGES</span>
+                <a href="index.html" class="text-2xl text-gray-400 hover:text-white transition-colors">Home Page 1</a>
+                <a href="home-performance.html" class="text-2xl text-gray-400 hover:text-white transition-colors">Home
+                    Page 2</a>
+            </div>
+
+            <a href="about.html" class="hover:text-copper transition-colors">ABOUT US</a>
+            <a href="services.html" class="hover:text-copper transition-colors">SERVICES</a>
+            <a href="pricing.html" class="hover:text-copper transition-colors">PRICING</a>
+            <a href="reviews.html" class="hover:text-copper transition-colors">REVIEWS</a>
+            <a href="blog.html" class="text-copper transition-colors glow-text">BLOG</a>
+            <a href="contact.html" class="hover:text-copper transition-colors">CONTACT</a>
+
+            <div class="w-full border-t border-white/10 mt-4 pt-8 flex flex-col items-center gap-6">
+                <a href="signin.html" class="font-medium tracking-widest hover:text-copper transition-colors">SIGN IN</a>
+                <a href="signup.html"
+                    class="btn-neon text-obsidian bg-copper text-xl px-12 py-4 rounded-full font-medium border-0">BOOK A SERVICE
+                   </a>
+                <div class="flex gap-4 mt-4">
+                    <button id="mobile-theme-toggle"
+                        class="text-xs tracking-widest border border-white/20 px-6 py-3 rounded-xl uppercase hover:text-copper transition-colors">TOGGLE
+                        THEME</button>
+                    <button id="mobile-rtl-toggle"
+                        class="text-xs tracking-widest border border-white/20 px-6 py-3 rounded-xl uppercase hover:text-copper transition-colors">RTL
+                        MODE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main
+        class="relative z-10 pt-32 md:pt-40 pb-12 md:pb-20 max-w-[1440px] mx-auto w-full overflow-hidden text-inherit">
+
+        <div
+            class="px-4 md:px-6 lg:px-12 mb-8 md:mb-12 font-mono text-xs tracking-widest uppercase opacity-70 flex gap-3 reveal">
+            <a href="index.html" class="hover:text-copper transition-colors">HOME</a>
+            <span>/</span>
+            <a href="blog.html" class="hover:text-copper transition-colors">ARCHIVES</a>
+            <span>/</span>
+            <span class="text-copper font-medium" id="ui-breadcrumb">LOADING LOG...</span>
+        </div>
+
+        <div class="px-4 md:px-6 lg:px-12 grid lg:grid-cols-12 gap-12 lg:gap-16 text-inherit">
+
+            <!-- LEFT COLUMN: Article Content -->
+            <div class="lg:col-span-8 text-inherit">
+
+                <!-- Dynamic Article Hero -->
+                <div class="reveal mb-10 md:mb-14 text-inherit">
+                    <div id="ui-category"
+                        class="inline-block font-mono text-[10px] md:text-xs text-obsidian bg-copper px-3 py-1.5 rounded font-medium tracking-widest mb-6">
+                        CATEGORY</div>
+
+                    <h1 id="ui-title"
+                        class="font-display font-medium text-5xl md:text-6xl lg:text-7xl leading-[0.9] mb-8 text-inherit">
+                        LOADING TRANSMISSION...
+                    </h1>
+
+                    <div
+                        class="flex flex-wrap gap-6 items-center font-mono text-xs md:text-sm opacity-60 border-y border-obsidian/10 dark:border-white/10 py-4 mb-10 transition-colors">
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg> <span id="ui-date">-- --, ----</span></span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg> <span id="ui-author">SYSTEM</span></span>
+                        <span class="flex items-center gap-2 text-copper"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12h4l3-9 5 18 3-9h5"></path>
+                            </svg> Verified Telemetry</span>
+                    </div>
+
+                    <div
+                        class="w-full h-[300px] sm:h-[500px] rounded-[24px] md:rounded-[32px] overflow-hidden relative cyber-card p-2 border-0">
+                        <div
+                            class="w-full h-full rounded-[20px] overflow-hidden relative border border-obsidian/10 dark:border-white/10">
+                            <img id="ui-image"
+                                src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=1920&q=80"
+                                class="w-full h-full object-cover mix-blend-luminosity" alt="Article Hero">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-ivory dark:from-obsidian via-transparent to-transparent">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Article Body -->
+                <div id="ui-content" class="article-body text-inherit"></div>
+
+                <!-- Share Widget -->
+                <div
+                    class="border-t border-b border-obsidian/10 dark:border-white/10 py-8 mt-16 flex flex-col sm:flex-row justify-between items-center gap-6 reveal transition-colors">
+                    <span class="font-display font-medium text-xl tracking-widest uppercase">SHARE THIS LOG</span>
+                    <div class="flex gap-4">
+                        <!-- Facebook Share Link -->
+                        <a id="share-facebook" href="#" target="_blank" rel="noopener noreferrer"
+                            class="w-12 h-12 rounded-xl bg-obsidian/5 dark:bg-white/5 border border-obsidian/10 dark:border-white/10 hover:border-copper hover:text-copper transition-colors flex items-center justify-center"
+                            aria-label="Share on Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <!-- Twitter/X Share Link -->
+                        <a id="share-twitter" href="#" target="_blank" rel="noopener noreferrer"
+                            class="w-12 h-12 rounded-xl bg-obsidian/5 dark:bg-white/5 border border-obsidian/10 dark:border-white/10 hover:border-copper hover:text-copper transition-colors flex items-center justify-center"
+                            aria-label="Share on Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                                </path>
+                            </svg>
+                        </a>
+                        <!-- Copy Link Button -->
+                        <button id="share-copy" type="button"
+                            class="w-12 h-12 rounded-xl bg-obsidian/5 dark:bg-white/5 border border-obsidian/10 dark:border-white/10 hover:border-copper hover:text-copper transition-colors flex items-center justify-center cursor-pointer"
+                            aria-label="Copy Link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Sidebar -->
+            <aside class="lg:col-span-4 space-y-8 text-inherit">
+
+                <!-- Search Widget -->
+                <div class="cyber-card reveal">
+                    <div
+                        class="cyber-card-inner p-6 md:p-8 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 text-obsidian dark:text-ivory transition-colors duration-500 rounded-[32px]">
+                        <h4 class="font-display font-medium text-xl tracking-widest text-copper mb-6 uppercase">Search
+                            Archives</h4>
+                        <div class="relative w-full">
+                            <input type="text" id="details-search-input" placeholder="Search..."
+                                class="search-box w-full rounded-xl px-5 py-3 font-medium text-sm outline-none border-obsidian/20 dark:border-white/20">
+                            <button id="details-search-btn"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-inherit opacity-50 hover:text-copper hover:opacity-100 transition-colors cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Widget -->
+                <div class="cyber-card reveal delay-100">
+                    <div
+                        class="cyber-card-inner p-6 md:p-8 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 text-obsidian dark:text-ivory transition-colors duration-500 rounded-[32px]">
+                        <h4 class="font-display font-medium text-xl tracking-widest text-copper mb-6 uppercase">
+                            Directories</h4>
+                        <ul class="space-y-3 font-display font-medium text-lg">
+                            <li><a href="blog.html"
+                                    class="flex justify-between items-center group hover:text-copper transition-colors border-b border-obsidian/10 dark:border-white/10 pb-2"><span>Engineering</span>
+                                    <span class="opacity-30 group-hover:opacity-100">14</span></a></li>
+                            <li><a href="blog.html"
+                                    class="flex justify-between items-center group hover:text-copper transition-colors border-b border-obsidian/10 dark:border-white/10 pb-2"><span>Custom
+                                        Builds</span> <span class="opacity-30 group-hover:opacity-100">08</span></a>
+                            </li>
+                            <li><a href="blog.html"
+                                    class="flex justify-between items-center group hover:text-copper transition-colors border-b border-obsidian/10 dark:border-white/10 pb-2"><span>Track
+                                        Days</span> <span class="opacity-30 group-hover:opacity-100">22</span></a></li>
+                            <li><a href="blog.html"
+                                    class="flex justify-between items-center group hover:text-copper transition-colors border-b border-obsidian/10 dark:border-white/10 pb-2"><span>Maintenance</span>
+                                    <span class="opacity-30 group-hover:opacity-100">45</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tags Widget -->
+                <div class="cyber-card reveal delay-200">
+                    <div
+                        class="cyber-card-inner p-6 md:p-8 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 text-obsidian dark:text-ivory transition-colors duration-500 rounded-[32px]">
+                        <h4 class="font-display font-medium text-xl tracking-widest text-copper mb-6 uppercase">Telemetry
+                            Tags</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="blog.html"
+                                class="px-3 py-1.5 text-xs font-mono font-medium tracking-widest bg-obsidian/5 dark:bg-white/5 border border-obsidian/20 dark:border-white/20 hover:border-copper hover:text-copper transition-colors rounded uppercase">ECU
+                                Flashing</a>
+                            <a href="blog.html"
+                                class="px-3 py-1.5 text-xs font-mono font-medium tracking-widest bg-obsidian/5 dark:bg-white/5 border border-obsidian/20 dark:border-white/20 hover:border-copper hover:text-copper transition-colors rounded uppercase">Desmo</a>
+                            <a href="blog.html"
+                                class="px-3 py-1.5 text-xs font-mono font-medium tracking-widest bg-obsidian/5 dark:bg-white/5 border border-obsidian/20 dark:border-white/20 hover:border-copper hover:text-copper transition-colors rounded uppercase">Titanium</a>
+                            <a href="blog.html"
+                                class="px-3 py-1.5 text-xs font-mono font-medium tracking-widest bg-obsidian/5 dark:bg-white/5 border border-obsidian/20 dark:border-white/20 hover:border-copper hover:text-copper transition-colors rounded uppercase">DynoJet</a>
+                            <a href="blog.html"
+                                class="px-3 py-1.5 text-xs font-mono font-medium tracking-widest bg-obsidian/5 dark:bg-white/5 border border-obsidian/20 dark:border-white/20 hover:border-copper hover:text-copper transition-colors rounded uppercase">Pirelli</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service CTA Widget -->
+                <div class="cyber-card reveal delay-300">
+                    <div
+                        class="cyber-card-inner p-6 md:p-8 relative overflow-hidden flex flex-col items-center text-center bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 text-obsidian dark:text-ivory transition-colors duration-500 rounded-[32px]">
+                        <div
+                            class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,90,31,0.15)_0%,transparent_70%)] pointer-events-none">
+                        </div>
+                        <h4 class="font-display font-medium text-3xl mb-4 leading-none z-10 text-inherit">REQUIRE A
+                            <br><span class="text-copper glow-text">DIAGNOSTIC?</span></h4>
+                        <p class="opacity-70 text-sm mb-6 z-10 text-inherit">Bring your machine to the Atelier for a
+                            50-point matrix scan.</p>
+                        <a href="contact.html"
+                            class="magnetic-btn btn-neon font-display font-medium text-lg w-full py-4 rounded-full flex justify-center z-10 text-obsidian bg-copper border-0">
+                            RESERVE A BAY
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- COMPLETE BULLETPROOF FOOTER -->
+    <footer
+        class="border-t border-obsidian/20 dark:border-ivory/20 pt-16 md:pt-20 pb-8 md:pb-12 px-4 md:px-6 lg:px-12 relative z-10 bg-ivory dark:bg-obsidian w-full mt-auto text-obsidian dark:text-ivory transition-colors duration-500">
+        <div
+            class="max-w-atelier mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 border-b border-obsidian/10 dark:border-ivory/10 pb-12 md:pb-16">
+            <div class="col-span-1 sm:col-span-2">
+                <a href="index.html" class="flex items-center gap-4 mb-6 w-fit group text-inherit">
+                    <svg viewBox="0 0 100 100"
+                        class="h-10 md:h-12 w-auto group-hover:scale-105 transition-transform duration-300">
+                        <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none" stroke="currentColor"
+                            stroke-width="6" stroke-linejoin="round" />
+                        <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="currentColor" fill-opacity="0.1"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="#FF5A1F" />
+                    </svg>
+                    <div class="flex flex-col">
+                        <span
+                            class="font-display font-medium text-3xl md:text-4xl tracking-wide leading-none text-inherit">TORQUECRAFT</span>
+                        <span class="font-display font-medium text-xs tracking-widest text-copper uppercase mt-2">Moto
+                            Atelier</span>
+                    </div>
+                </a>
+                <p class="opacity-70 max-w-sm mb-8 text-base md:text-lg font-medium">Precision motorcycle service,
+                    performance tuning, and custom fabrication for riders who demand engineering perfection.</p>
+
+                <!-- SOCIAL MEDIA LINKS -->
+                <div class="flex gap-4">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-display font-medium text-xl md:text-2xl mb-6 md:mb-8 uppercase opacity-50">Workshop</h4>
+                <ul class="space-y-3 md:space-y-4 text-base md:text-lg font-medium opacity-80">
+                    <li><a href="services.html" class="hover:text-copper transition-colors">All Services</a></li>
+                    <li><a href="pricing.html" class="hover:text-copper transition-colors">Pricing & Plans</a></li>
+                    <li><a href="about.html" class="hover:text-copper transition-colors">The Atelier</a></li>
+                    <li><a href="contact.html" class="hover:text-copper transition-colors">Book an Appointment</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-display font-medium text-xl md:text-2xl mb-6 md:mb-8 uppercase opacity-50">Contact</h4>
+                <ul class="space-y-3 md:space-y-4 text-base md:text-lg font-medium opacity-80">
+                    <li class="opacity-80">100 Precision Way<br>Moto District, NY 10001</li>
+                    <li><a href="tel:+15550100" class="hover:text-copper transition-colors font-medium">+1 (555)
+                            0100-MOTO</a></li>
+                    <li><a href="mailto:service@torquecraft.com"
+                            class="hover:text-copper transition-colors break-all">service@torquecraft.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-atelier mx-auto pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-display tracking-widest font-medium opacity-50 text-center md:text-left gap-4 md:gap-0">
+            <p>&copy; 2026 TORQUECRAFT MOTO ATELIER. PRECISION ENGINEERED.</p>
+            <div class="flex flex-wrap justify-center md:justify-end gap-4 md:gap-8">
+                <a href="#" class="hover:text-copper hover:opacity-100 transition-all">PRIVACY POLICY</a>
+                <a href="#" class="hover:text-copper hover:opacity-100 transition-all">TERMS OF SERVICE</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('details-search-input');
+            const searchBtn = document.getElementById('details-search-btn');
+
+            const executeSearch = () => {
+                if (searchInput.value.trim() !== '') {
+                    window.location.href = 'blog.html';
+                }
+            };
+
+            searchBtn.addEventListener('click', executeSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    executeSearch();
+                }
+            });
+
+            // Dynamic Share Widget Logic
+            const currentUrl = window.location.href;
+            const currentTitle = document.title;
+
+            const fbBtn = document.getElementById('share-facebook');
+            if (fbBtn) {
+                fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+            }
+
+            const twBtn = document.getElementById('share-twitter');
+            if (twBtn) {
+                twBtn.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(currentTitle)}`;
+            }
+
+            const copyBtn = document.getElementById('share-copy');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(currentUrl).then(() => {
+                        let toast = document.getElementById('toast-notification');
+                        if (!toast) {
+                            toast = document.createElement('div');
+                            toast.id = 'toast-notification';
+                            toast.className = 'fixed bottom-5 right-5 md:bottom-10 md:right-10 bg-copper text-obsidian px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(255,90,31,0.4)] flex items-center gap-4 transform translate-y-24 opacity-0 transition-all duration-500 z-[100] font-display font-medium text-lg pointer-events-none';
+                            toast.innerHTML = `<span>LINK COPIED TO CLIPBOARD</span>`;
+                            document.body.appendChild(toast);
+                        } else {
+                            toast.querySelector('span').innerText = 'LINK COPIED TO CLIPBOARD';
+                        }
+
+                        toast.classList.remove('translate-y-24', 'opacity-0');
+                        toast.classList.add('translate-y-0', 'opacity-100');
+                        setTimeout(() => {
+                            toast.classList.remove('translate-y-0', 'opacity-100');
+                            toast.classList.add('translate-y-24', 'opacity-0');
+                        }, 4000);
+                    });
+                });
+            }
+
+            const blogDatabase = {
+                "1": {
+                    title: "Project Nightmare: Stripping the MT-09 to its Soul",
+                    category: "CUSTOM BUILDS",
+                    date: "OCT 24, 2026",
+                    author: "MARCUS VANE",
+                    image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1920&q=80",
+                    content: `
+                        <p>When the client first dropped off the 2021 Yamaha MT-09, the brief was simple: "Make it lighter, make it louder, and make it handle." What started as a simple suspension and exhaust job rapidly spiraled into a complete teardown.</p>
+                        <p>The MT-09's CP3 engine is an absolute masterpiece of crossplane torque, but out of the factory, it is heavily restricted by Euro-5 emissions standards. The throttle map is notoriously snatchy, and the exhaust system acts like an anchor on the belly of the bike.</p>
+                        <h3>Phase 1: Weight Reduction</h3>
+                        <p>We began by stripping away everything that didn't make the bike go faster or stop quicker. The factory subframe was cut and replaced with a custom-fabricated titanium trellis, welded in-house. This alone saved 4.2kg.</p>
+                        <ul>
+                            <li>Replaced cast wheels with forged aluminum Marchesinis.</li>
+                            <li>Swapped heavy ABS pump for direct braided lines (Track Only setup).</li>
+                            <li>Installed full carbon-fiber monocoque tail section.</li>
+                        </ul>
+                        <blockquote>"A motorcycle is only as fast as the weight it doesn't have to carry. Horsepower is expensive, but lightness is free if you know where to look." - Marcus Vane</blockquote>
+                        <h3>Phase 2: The Telemetry Flash</h3>
+                        <p>With the physical weight gone, we turned to the brain. Using our DynoJet cell, we flashed the ECU with a custom standalone map. We adjusted the ignition timing, enriched the air/fuel ratio to compensate for the new full titanium Akrapovic system, and completely smoothed out the ride-by-wire throttle response.</p>
+                        <p>The final result? 135 horsepower at the rear wheel, and a total wet weight of just 169kg. The Nightmare is born.</p>
+                    `
+                },
+                "2": {
+                    title: "The Truth About Euro-5 Emissions & ECU Flashing",
+                    category: "ENGINEERING",
+                    date: "OCT 12, 2026",
+                    author: "ELIAS THORN",
+                    image: "https://images.pexels.com/photos/33175725/pexels-photo-33175725.jpeg?auto=compress&cs=tinysrgb&w=1920",
+                    content: `
+                        <p>If you've purchased a superbike manufactured after 2021, you've likely experienced the dreaded "Euro-5 Snatch." You roll off the throttle for a corner, gently roll back on at the apex, and the bike jerks violently, unsettling the chassis.</p>
+                        <h3>The Lean Run Condition</h3>
+                        <p>Manufacturers are forced to map bikes incredibly lean at lower RPMs to pass stringent emissions testing. While this is great for passing government tests, it creates a massive hesitation between closed throttle and open throttle. The engine is essentially starving for fuel the moment you crack the grip.</p>
+                        <blockquote>"Riding a lean-mapped bike on the track is like trying to do surgery with a sledgehammer. You have no finesse at the most critical point of the corner."</blockquote>
+                        <p>Through ECU flashing, we rewrite the factory fueling tables. By enriching the mixture at 0-15% throttle openings, we restore the buttery-smooth transition that high-performance engines were actually designed to have.</p>
+                    `
+                },
+                "3": {
+                    title: "Dialing in Chassis Geometry for the Circuit",
+                    category: "TRACK DAYS",
+                    date: "SEP 28, 2026",
+                    author: "SARAH CONNERS",
+                    image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1920&q=80",
+                    content: `
+                        <p>Engine power means absolutely nothing if the chassis cannot translate it to the tarmac. We see dozens of riders chasing horsepower figures on the dyno, only to get passed on the outside by 600cc bikes with perfectly dialed suspension.</p>
+                        <h3>The Black Art of Sag</h3>
+                        <p>The first thing we do with any track bike is set the static and rider sag. This ensures the suspension operates in the correct part of its stroke. Too little sag, and the bike tops out, losing traction over bumps. Too much, and you bottom out under hard braking.</p>
+                        <ul>
+                            <li>Front Fork Sag Target: 35mm - 40mm</li>
+                            <li>Rear Shock Sag Target: 25mm - 30mm</li>
+                        </ul>
+                        <p>Once sag is set, we move to chassis pitch. Dropping the front forks through the triple clamps by just 3mm can drastically sharpen the steering angle, making the bike turn in much faster, though at the expense of high-speed stability.</p>
+                    `
+                },
+                "4": {
+                    title: "Desmodromic Valve Adjustments Explained",
+                    category: "ENGINEERING",
+                    date: "SEP 15, 2026",
+                    author: "DAVID REED",
+                    image: "https://images.pexels.com/photos/37609825/pexels-photo-37609825.jpeg?auto=compress&cs=tinysrgb&w=1920",
+                    content: `
+                        <p>The Ducati Desmodromic valve system is one of the most misunderstood pieces of engineering in the motorcycling world. Instead of using traditional springs to close the valves, it uses a dedicated closing rocker arm.</p>
+                        <h3>Why Springs Fail</h3>
+                        <p>At 14,000 RPM, standard coil springs simply cannot react fast enough. The valve "floats," never properly sealing against the head, causing massive compression loss and potential piston collisions. The Desmo system forcibly closes the valve, eliminating float entirely.</p>
+                        <blockquote>"It's a beautiful, violent mechanical ballet happening thousands of times a second underneath you."</blockquote>
+                        <p>However, this requires two shims per valve (an opener and a closer) instead of one. Measuring and adjusting these shims to a tolerance of 0.05mm requires specialized micrometer tooling and significant patience, which is why the "Desmo Service" is so critical to schedule.</p>
+                    `
+                },
+                "5": {
+                    title: "The Importance of Synthetic Brake Fluid Bleeds",
+                    category: "MAINTENANCE",
+                    date: "AUG 30, 2026",
+                    author: "MARCUS VANE",
+                    image: "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=1920&q=80",
+                    content: `
+                        <p>Of all the fluids in your motorcycle, brake fluid is the most heavily abused and frequently neglected. The hydraulic system relies on the fact that fluid cannot be compressed—until it absorbs water.</p>
+                        <h3>The Hygroscopic Enemy</h3>
+                        <p>Standard DOT 4 and DOT 5.1 fluids are hygroscopic, meaning they naturally absorb moisture directly from the atmosphere through the microscopic pores in rubber brake lines. Once water enters the system, its boiling point drops drastically.</p>
+                        <ul>
+                            <li>Fresh DOT 4 boiling point: 446°F (230°C)</li>
+                            <li>Wet DOT 4 (3% water) boiling point: 311°F (155°C)</li>
+                        </ul>
+                        <p>Under heavy track braking or long mountain descents, the calipers get hot enough to boil that absorbed water, turning it into gas. Gas is highly compressible, resulting in the dreaded "spongy lever" or total brake fade. Flush your system annually.</p>
+                    `
+                },
+                "6": {
+                    title: "TIG Welding Titanium: The Art of the Exhaust",
+                    category: "CUSTOM BUILDS",
+                    date: "AUG 14, 2026",
+                    author: "SARAH CONNERS",
+                    image: "https://images.pexels.com/photos/36990103/pexels-photo-36990103.jpeg?auto=compress&cs=tinysrgb&w=1920",
+                    content: `
+                        <p>Fabricating a custom titanium exhaust system is a test of a fabricator's absolute patience. Unlike stainless steel or aluminum, titanium is extremely reactive to oxygen when heated above 800°F.</p>
+                        <h3>The Back-Purging Requirement</h3>
+                        <p>If you weld titanium without completely displacing the oxygen around it, the weld will pull oxygen into the puddle, turning brittle and porous. It will literally shatter under the vibration of a running motorcycle engine.</p>
+                        <blockquote>"A perfect titanium weld should look like a stack of dimes shimmering in silver, gold, or light purple. If it's chalky gray, it's garbage."</blockquote>
+                        <p>To prevent this, we "back-purge" every pipe. We cap both ends of the exhaust tubing and flood the inside with pure Argon gas, while simultaneously shielding the outside puddle with an oversized TIG cup. It takes three times longer, but the structural integrity is flawless.</p>
+                    `
+                },
+                "7": {
+                    title: "Choosing the Right Slick Compound",
+                    category: "TRACK DAYS",
+                    date: "JUL 02, 2026",
+                    author: "SARAH CONNERS",
+                    image: "https://images.pexels.com/photos/5803283/pexels-photo-5803283.jpeg?auto=compress&cs=tinysrgb&w=1920",
+                    content: `
+                        <p>Showing up to a track day with the wrong tire compound is an expensive mistake. Running a soft SC1 compound on a cold, abrasive track surface will result in severe "cold tearing" within five laps, destroying a $250 tire.</p>
+                        <h3>The Temperature Matrix</h3>
+                        <p>Manufacturers like Pirelli and Dunlop design specific rubber compounds that require a certain operating window (usually between 160°F and 200°F). You must choose your compound based on the ambient track temperature, not your riding speed.</p>
+                        <ul>
+                            <li>SC1 (Soft): Ideal for smooth tracks and high ambient temperatures. Excellent ultimate grip, fast wear.</li>
+                            <li>SC2 (Medium): The workhorse. Broader operating window, handles rougher tarmac, consistent grip drop-off.</li>
+                            <li>SC3 (Hard): Best for endurance racing or very cold/abrasive asphalt where soft tires would shred.</li>
+                        </ul>
+                        <p>Always verify your hot pressures coming straight off the track. A 2 PSI difference can completely change the profile and wear characteristics of a slick tire.</p>
+                    `
+                },
+                "8": {
+                    title: "Decoding CAN-Bus Telemetry Data",
+                    category: "ENGINEERING",
+                    date: "JUN 18, 2026",
+                    author: "ELIAS THORN",
+                    image: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=1920&q=80",
+                    content: `
+                        <p>A modern motorcycle wiring harness is no longer a simple collection of copper wires sending 12-volts to a bulb. It is a highly complex, multiplexed digital network called a CAN-Bus (Controller Area Network).</p>
+                        <h3>How the Modules Talk</h3>
+                        <p>Instead of running dedicated wires from the wheel speed sensor to the ABS pump, and another to the dash, the sensor broadcasts a digital packet of data onto the CAN network. Any module on the bike that needs that data simply "listens" for it.</p>
+                        <blockquote>"Chasing an electrical gremlin on a modern bike with just a multimeter is impossible. You need to speak binary."</blockquote>
+                        <p>When a customer brings us a bike with a mystery fault, we tap directly into this data stream. Our telemetry software allows us to see exactly which module is failing to broadcast, or what specific voltage drop is causing the ECU to trigger limp-mode.</p>
+                    `
+                },
+                "9": {
+                    title: "The Retro-Modern V4 Streetfighter Concept",
+                    category: "CUSTOM BUILDS",
+                    date: "MAY 05, 2026",
+                    author: "MARCUS VANE",
+                    image: "https://images.pexels.com/photos/9924837/pexels-photo-9924837.jpeg?auto=compress&cs=tinysrgb&w=1920",
+                    content: `
+                        <p>The project started with a crashed 2018 Aprilia RSV4 Factory. The engine and main frame were perfectly intact, but the fairings and subframe were destroyed. The client wanted a streetfighter, but with the brutal aesthetic of a 1980s endurance racer.</p>
+                        <h3>Stripping the Electronics</h3>
+                        <p>The biggest challenge with modern naked conversions is hiding the massive wiring loom. Superbikes are designed to hide miles of cables behind aerodynamic plastics. We had to reroute the entire aPRC electronics package inside the V-angle of the engine block.</p>
+                        <ul>
+                            <li>Fabricated a custom chromoly subframe to house the IMU sensor unit securely.</li>
+                            <li>Fitted a vintage round LED headlamp with custom CNC-machined brackets.</li>
+                            <li>Relocated the radiator expansion tank and lithium battery under the custom leather saddle.</li>
+                        </ul>
+                        <p>The end result is 201 horsepower of angry Italian V4, completely exposed, weighing just 175kg. It is terrifying, and it is beautiful.</p>
+                    `
+                },
+                "default": {
+                    title: "Classified Telemetry Log",
+                    category: "ARCHIVE",
+                    date: "SYS UPDATE",
+                    author: "ATELIER DATABASE",
+                    image: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=1920&q=80",
+                    content: `
+                        <p>This transmission is currently secured in the TorqueCraft archives. Our engineers are compiling the necessary telemetry data, dyno charts, and micrometer readings for this specific log.</p>
+                        <p>Please return shortly to access the full technical breakdown, or utilize the search interface in the sidebar to locate available protocols.</p>
+                    `
+                }
+            };
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            const data = blogDatabase[articleId] || blogDatabase["default"];
+
+            document.getElementById('ui-title').innerText = data.title;
+            document.getElementById('ui-category').innerText = data.category;
+            document.getElementById('ui-date').innerText = data.date;
+            document.getElementById('ui-author').innerText = data.author;
+            document.getElementById('ui-breadcrumb').innerText = data.category;
+            document.getElementById('ui-image').src = data.image;
+            document.getElementById('ui-content').innerHTML = data.content;
+
+            document.title = "TorqueCraft | " + data.title;
+        });
+    </script>
+</body>
+
+</html>

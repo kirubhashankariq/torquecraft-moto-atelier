@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TorqueCraft | Advanced Moto Atelier</title>
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z' fill='none' stroke='%23FF5A1F' stroke-width='8'/><path d='M35 40 H65 V52 H54 V75 H46 V52 H35 Z' fill='%23FF5A1F'/></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { obsidian: '#050608', gunmetal: '#12151A', ivory: '#F5F0E8', copper: '#FF5A1F' },
+                    maxWidth: { 'atelier': '1440px' }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Anti-Flash Dark Mode Script -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        /* FIXED: Fade-in without 'transform' so the Fixed Navbar stays perfectly in place */
+        body {
+            animation: fadeInPage 0.6s ease-out forwards;
+            background-color: #F5F0E8;
+            transition: background-color 0.5s ease;
+        }
+
+        html.dark body {
+            background-color: #050608;
+        }
+
+        @keyframes fadeInPage {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* FIXED: Makes all your original outline text beautifully visible in both modes! */
+        .text-outline {
+            color: transparent !important;
+            -webkit-text-stroke: 1px #050608 !important;
+            /* Obsidian stroke for Light Mode */
+        }
+
+        html.dark .text-outline {
+            -webkit-text-stroke: 1px #F5F0E8 !important;
+            /* Ivory stroke for Dark Mode */
+        }
+
+        @media (min-width: 640px) {
+            .text-outline {
+                -webkit-text-stroke: 2px #050608 !important;
+            }
+
+            html.dark .text-outline {
+                -webkit-text-stroke: 2px #F5F0E8 !important;
+            }
+        }
+
+        /* Ensures hover states strip the stroke when necessary */
+        .group:hover .group-hover\:text-copper.text-outline {
+            color: #FF5A1F !important;
+            -webkit-text-stroke: 0px !important;
+        }
+    </style>
+</head>
+
+<body
+    class="antialiased selection:bg-copper selection:text-obsidian relative w-full overflow-x-hidden bg-ivory text-obsidian dark:bg-obsidian dark:text-ivory transition-colors duration-500 m-0 p-0">
+
+    <!-- FIXED: Canvas spans the entire viewport perfectly without any zoomed distortion -->
+    <canvas id="particle-canvas" class="fixed top-0 left-0 pointer-events-none -z-10"
+        style="width: 100vw; height: 100vh;"></canvas>
+
+    <!-- HEADER: Advanced Universal Navigation -->
+    <header class="fixed w-full top-0 z-50 px-4 md:px-6 lg:px-8 mt-4 md:mt-6">
+        <nav
+            class="max-w-atelier mx-auto py-3 md:py-4 px-5 md:px-8 flex justify-between items-center bg-white dark:bg-obsidian text-obsidian dark:text-ivory border border-obsidian/10 dark:border-ivory/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-all duration-500 rounded-full">
+
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center gap-3 text-inherit shrink-0 group">
+                <svg viewBox="0 0 100 100"
+                    class="h-8 md:h-10 w-auto group-hover:scale-105 transition-transform duration-300">
+                    <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none" stroke="currentColor"
+                        stroke-width="6" stroke-linejoin="round" />
+                    <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="currentColor" fill-opacity="0.1"
+                        stroke="currentColor" stroke-width="2" />
+                    <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="#FF5A1F" />
+                </svg>
+                <div class="flex flex-col">
+                    <span
+                        class="font-display font-medium text-lg md:text-2xl tracking-wide leading-none">TORQUECRAFT</span>
+                    <span
+                        class="font-display font-medium text-[7px] md:text-[9px] tracking-widest text-copper uppercase mt-1">Moto
+                        Atelier</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <div
+                class="hidden lg:flex items-center gap-4 xl:gap-6 font-display text-sm xl:text-lg tracking-widest font-medium opacity-80">
+
+                <div class="relative group py-2">
+                    <button
+                        class="text-copper drop-shadow-[0_0_8px_rgba(255,90,31,0.8)] transition-colors flex items-center gap-1 uppercase outline-none">
+                        HOME
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div
+                        class="absolute top-full left-0 mt-4 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        <div
+                            class="p-2 flex flex-col gap-1 bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 shadow-xl rounded-2xl">
+                            <a href="index.html"
+                                class="px-4 py-3 bg-copper/10 rounded-xl transition-colors text-sm font-medium text-copper flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-copper shadow-[0_0_8px_#FF5A1F]"></div> Home
+                                Page 1
+                            </a>
+                            <a href="home-performance.html"
+                                class="px-4 py-3 hover:bg-obsidian/5 dark:hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-obsidian dark:text-ivory hover:text-copper opacity-70 hover:opacity-100">
+                                Home Page 2
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="about.html" class="hover:text-copper transition-colors uppercase">ABOUT US</a>
+                <a href="services.html" class="hover:text-copper transition-colors uppercase">SERVICES</a>
+                <a href="pricing.html" class="hover:text-copper transition-colors uppercase">PRICING</a>
+                <a href="reviews.html" class="hover:text-copper transition-colors uppercase">REVIEWS</a>
+                <a href="blog.html" class="hover:text-copper transition-colors uppercase">BLOG</a>
+                <a href="contact.html" class="hover:text-copper transition-colors uppercase">CONTACT</a>
+            </div>
+
+            <!-- UI Toggles & CTA Buttons (Desktop) -->
+            <div class="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
+                <button id="rtl-toggle"
+                    class="font-display text-xs md:text-sm tracking-widest hover:text-copper transition-colors border border-inherit px-2 py-1 rounded opacity-70">RTL</button>
+                <button id="theme-toggle" class="hover:text-copper transition-colors opacity-70"
+                    aria-label="Toggle Theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-5 h-5 md:w-6 md:h-6">
+                        <path
+                            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z">
+                        </path>
+                    </svg>
+                </button>
+                <a href="signin.html"
+                    class="font-display text-sm xl:text-lg tracking-widest hover:text-copper transition-colors font-medium opacity-80 uppercase">SIGN
+                    IN</a>
+                <a href="signup.html"
+                    class="magnetic-btn btn-neon font-display text-sm md:text-lg xl:text-xl tracking-wider px-6 md:px-8 py-2 md:py-2.5 rounded-full flex items-center font-medium text-obsidian bg-copper border-0">
+                    BOOK A SERVICE
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" class="lg:hidden text-inherit p-2 hover:text-copper transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- BULLETPROOF Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed top-0 left-0 w-full h-full bg-obsidian/98 dark:bg-obsidian/98 backdrop-blur-3xl z-[100] opacity-0 invisible pointer-events-none transition-all duration-500 overflow-y-auto flex flex-col justify-start py-20 px-6 gap-6 font-display text-2xl tracking-wide text-white">
+
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-white hover:text-copper p-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="flex flex-col items-center justify-start min-h-full py-8 w-full gap-6">
+            <div class="flex flex-col items-center gap-2 mb-2 w-full border-b border-white/10 pb-6 text-center">
+                <span class="text-white opacity-50 text-xl tracking-widest mb-2">HOME PAGES</span>
+                <a href="index.html" class="text-2xl text-copper transition-colors glow-text">Home Page 1</a>
+                <a href="home-performance.html" class="text-2xl text-gray-400 hover:text-white transition-colors">Home
+                    Page 2</a>
+            </div>
+
+            <a href="about.html" class="hover:text-copper transition-colors">ABOUT US</a>
+            <a href="services.html" class="hover:text-copper transition-colors">SERVICES</a>
+            <a href="pricing.html" class="hover:text-copper transition-colors">PRICING</a>
+            <a href="reviews.html" class="hover:text-copper transition-colors">REVIEWS</a>
+            <a href="blog.html" class="hover:text-copper transition-colors">BLOG</a>
+            <a href="contact.html" class="hover:text-copper transition-colors">CONTACT</a>
+
+            <div class="w-full border-t border-white/10 mt-4 pt-8 flex flex-col items-center gap-6">
+                <a href="signin.html" class="font-medium tracking-widest hover:text-copper transition-colors">SIGN IN</a>
+                <a href="signup.html"
+                    class="btn-neon text-obsidian bg-copper text-xl px-12 py-4 rounded-full font-medium border-0">BOOK A SERVICE</a>
+
+                <div class="flex gap-4 mt-4">
+                    <button id="mobile-theme-toggle"
+                        class="text-xs tracking-widest border border-white/20 px-6 py-3 rounded-xl uppercase hover:text-copper transition-colors">TOGGLE
+                        THEME</button>
+                    <button id="mobile-rtl-toggle"
+                        class="text-xs tracking-widest border border-white/20 px-6 py-3 rounded-xl uppercase hover:text-copper transition-colors">RTL
+                        MODE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-32 md:pt-48 pb-12 md:pb-20 max-w-[1440px] mx-auto w-full overflow-hidden">
+
+        <!-- SECTION 1: Cyber-Hero -->
+        <section class="px-4 md:px-6 lg:px-12 grid lg:grid-cols-12 gap-10 md:gap-12 items-center mb-24 lg:mb-40">
+            <div class="lg:col-span-7 z-20 relative pt-10 lg:pt-0">
+                <div
+                    class="reveal inline-flex items-center gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-copper/30 bg-copper/10 mb-6 md:mb-8 backdrop-blur-sm">
+                    <div class="w-2 h-2 rounded-full bg-copper shadow-[0_0_10px_#FF5A1F] animate-pulse"></div>
+                    <span class="font-display font-medium text-xs md:text-sm tracking-widest text-copper uppercase">System
+                        Online // 4800+ Riders</span>
+                </div>
+
+                <h1
+                    class="reveal font-display font-medium text-6xl sm:text-[6rem] lg:text-[9rem] leading-[0.9] md:leading-[0.85] mb-6 md:mb-8 relative w-full mt-10 sm:mt-16 lg:mt-20">
+                    <span
+                        class="text-outline absolute -top-12 sm:-top-20 -left-2 sm:-left-4 opacity-30 select-none text-[5rem] sm:text-[8rem] lg:text-[10rem]">ENGINEERED</span>
+                    <span class="relative z-10 text-inherit">PRECISION.</span><br>
+                    <span class="relative z-10 text-outline">PURE</span><br>
+                    <span
+                        class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-copper to-orange-400 drop-shadow-[0_0_10px_rgba(255,90,31,0.6)]">PERFORMANCE.</span>
+                </h1>
+
+                <p
+                    class="reveal text-base md:text-xl opacity-70 max-w-lg mb-8 md:mb-12 leading-relaxed font-medium text-inherit">
+                    A premium motorcycle service and repair shop offering advanced diagnostics, expert maintenance, and uncompromising performance tuning.
+                </p>
+
+                <div class="reveal flex flex-col sm:flex-row gap-4 md:gap-6">
+                    <a href="contact.html"
+                        class="magnetic-btn btn-neon font-display font-medium text-xl md:text-2xl tracking-wide px-8 py-4 md:px-10 clip-edges flex items-center justify-center gap-3 text-center w-full sm:w-auto text-obsidian bg-copper border-0">
+                        BOOK A SERVICE
+                    </a>
+                    <a href="services.html"
+                        class="magnetic-btn font-display font-medium text-lg md:text-xl tracking-wide px-8 py-4 clip-edges border border-obsidian/30 dark:border-white/30 hover:border-copper transition-all bg-white/5 dark:bg-obsidian/5 backdrop-blur-md text-center w-full sm:w-auto text-inherit">
+                        ENQUIRE NOW
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cinematic HUD Image -->
+            <div
+                class="lg:col-span-5 relative reveal h-[400px] sm:h-[500px] lg:h-[700px] cyber-card rounded-[24px] lg:rounded-[32px] border-0">
+                <div
+                    class="cyber-card-inner relative overflow-hidden flex items-end justify-center h-full border border-obsidian/10 dark:border-white/10 rounded-[24px] lg:rounded-[32px]">
+                    <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&q=100&w=2000"
+                        class="absolute inset-0 w-full h-full object-cover opacity-85 hover:scale-105 transition-all duration-700"
+                        alt="Luxury Sports Motorcycle">
+
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/30 dark:from-obsidian dark:via-obsidian/30 to-transparent">
+                    </div>
+
+                    <div
+                        class="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-[7px] md:text-[9px] tracking-widest text-copper bg-black/50 px-2 py-1 border border-copper/30 backdrop-blur-md text-white">
+                        [ REC ]</div>
+                    <div
+                        class="absolute top-4 right-4 md:top-6 md:right-6 font-mono text-[7px] md:text-[9px] tracking-widest text-white/70 bg-black/50 px-2 py-1 backdrop-blur-md text-white">
+                        [ 85MM // F1.4 ]</div>
+
+                    <div class="relative z-10 p-4 md:p-8 w-full">
+                        <div
+                            class="flex justify-between items-end border-t border-white/20 pt-4 md:pt-6 bg-obsidian/60 md:bg-obsidian/40 backdrop-blur-md p-3 md:p-4 rounded-xl md:rounded-2xl border border-white/10">
+                            <div>
+                                <div class="font-display font-medium text-lg md:text-2xl text-white">SYS. CALIBRATION
+                                </div>
+                                <div class="text-copper font-display tracking-widest text-xs md:text-sm">OPTIMAL STATUS
+                                </div>
+                            </div>
+                            <div class="font-display font-medium text-2xl md:text-4xl text-white glow-text">98%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Trust Grid -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 reveal">
+            <div class="cyber-card rounded-3xl md:rounded-full">
+                <div
+                    class="cyber-card-inner px-6 md:px-12 py-6 md:py-8 grid grid-cols-2 md:flex flex-wrap justify-between items-center gap-6 md:gap-8 bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5 md:w-6 md:h-6 text-copper">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span
+                            class="font-display font-medium text-sm md:text-lg tracking-widest opacity-90 uppercase">Rapid
+                            Slots</span>
+                    </div>
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5 md:w-6 md:h-6 text-copper">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                        <span class="font-display font-medium text-sm md:text-lg tracking-widest opacity-90 uppercase">OEM
+                            Scans</span>
+                    </div>
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5 md:w-6 md:h-6 text-copper">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        <span
+                            class="font-display font-medium text-sm md:text-lg tracking-widest opacity-90 uppercase">Clear
+                            Quotes</span>
+                    </div>
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5 md:w-6 md:h-6 text-copper">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span
+                            class="font-display font-medium text-sm md:text-lg tracking-widest opacity-90 uppercase">Precision</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Asymmetric Specs Grid -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 text-inherit">
+            <div class="text-center mb-12 md:mb-20 reveal">
+                <h2 class="font-display font-medium text-5xl md:text-[6rem] mb-4 leading-tight text-inherit">SERVICE <br
+                        class="md:hidden"><span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-copper to-orange-400">ARCHITECTURE.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[auto] md:auto-rows-[320px]">
+
+                <!-- Main Featured Cyber Card (Complete Overhaul) - CRYSTAL CLEAR IMAGE -->
+                <div class="cyber-card md:col-span-2 md:row-span-2 group reveal h-[400px] md:h-auto">
+                    <a href="service-details.html?id=engine"
+                        class="cyber-card-inner p-6 md:p-12 flex flex-col justify-end relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <img src="https://images.pexels.com/photos/30866489/pexels-photo-30866489.jpeg"
+                            class="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-700"
+                            alt="Motorcycle engineering">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-white via-white/40 dark:from-obsidian dark:via-obsidian/50 to-transparent z-0">
+                        </div>
+
+                        <div class="relative z-10">
+                            <div
+                                class="w-14 h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-copper bg-black/40 border border-white/10 mb-6 md:mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(255,90,31,0.2)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" class="w-8 h-8 md:w-10 md:h-10">
+                                    <path
+                                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3
+                                class="font-display font-medium text-3xl md:text-5xl mb-2 md:mb-4 text-obsidian dark:text-ivory transition-colors">
+                                COMPLETE OVERHAUL</h3>
+                            <p
+                                class="opacity-90 text-sm md:text-lg mb-6 md:mb-8 max-w-md font-medium text-obsidian dark:text-ivory transition-colors drop-shadow">
+                                Factory-spec teardown, ultrasonic cleaning, valve clearances, and clinical reassembly.
+                            </p>
+                            <div
+                                class="inline-flex items-center font-display text-lg md:text-2xl tracking-widest text-copper font-medium uppercase">
+                                Initialize Protocol <span
+                                    class="ml-2 group-hover:translate-x-3 transition-transform">→</span></div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Standard Card 1 (Fluid Dynamics) - CRYSTAL CLEAR IMAGE -->
+                <div class="cyber-card group reveal delay-100">
+                    <a href="service-details.html?id=fluids"
+                        class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <img src="https://images.pexels.com/photos/3076826/pexels-photo-3076826.jpeg"
+                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            alt="Motorcycle engine detail">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                        </div>
+
+                        <div
+                            class="relative z-10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center text-copper bg-black/40 border border-white/10 backdrop-blur-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" class="w-6 h-6 md:w-7 md:h-7">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10">
+                            <h3
+                                class="font-display font-medium text-2xl md:text-4xl mb-2 text-obsidian dark:text-ivory transition-colors">
+                                FLUID DYNAMICS</h3>
+                            <p
+                                class="opacity-90 text-sm md:text-base text-obsidian dark:text-gray-200 transition-colors font-medium">
+                                Synthetic oils and hydraulic bleeding.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Standard Card 2 (Diagnostics) - CRYSTAL CLEAR IMAGE -->
+                <div class="cyber-card group reveal delay-200">
+                    <a href="service-details.html?id=diagnostics"
+                        class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=800"
+                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            alt="Motorcycle diagnostics">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                        </div>
+
+                        <div
+                            class="relative z-10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center text-copper bg-black/40 border border-white/10 backdrop-blur-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" class="w-6 h-6 md:w-7 md:h-7">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <div class="relative z-10">
+                            <h3
+                                class="font-display font-medium text-2xl md:text-4xl mb-2 text-obsidian dark:text-ivory transition-colors">
+                                DIAGNOSTICS</h3>
+                            <p
+                                class="opacity-90 text-sm md:text-base text-obsidian dark:text-gray-200 transition-colors font-medium">
+                                OEM-level scanning and fault resolution.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Manufacturer Protocols -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 reveal">
+            <div class="cyber-card text-center">
+                <div
+                    class="cyber-card-inner p-8 md:p-16 bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                    <h2 class="font-display font-medium text-3xl md:text-4xl mb-6 md:mb-10 text-outline">AUTHORIZED
+                        EXPERTISE PROTOCOLS</h2>
+                    <div
+                        class="flex flex-wrap justify-center gap-6 md:gap-12 font-display font-medium text-lg md:text-2xl tracking-widest opacity-50">
+                        <span class="hover:text-copper hover:opacity-100 transition-colors cursor-default">DUCATI</span>
+                        <span class="hover:text-copper hover:opacity-100 transition-colors cursor-default">BMW
+                            MOTORRAD</span>
+                        <span
+                            class="hover:text-copper hover:opacity-100 transition-colors cursor-default">TRIUMPH</span>
+                        <span
+                            class="hover:text-copper hover:opacity-100 transition-colors cursor-default">APRILIA</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: The Edge -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+            <div class="reveal">
+                <h2
+                    class="font-display font-medium text-5xl sm:text-6xl md:text-[6rem] leading-[0.9] mb-8 md:mb-12 break-words text-inherit">
+                    WE DON'T FIX. <br><span class="text-copper glow-text">WE ENGINEER.</span>
+                </h2>
+
+                <div class="space-y-4 md:space-y-6">
+                    <div class="cyber-card group">
+                        <div
+                            class="cyber-card-inner p-5 md:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                            <div
+                                class="font-display font-medium text-4xl md:text-5xl text-outline group-hover:text-copper transition-colors">
+                                01</div>
+                            <div>
+                                <h4 class="font-display font-medium text-xl md:text-2xl mb-1">Certificated Masters</h4>
+                                <p class="opacity-70 font-medium text-sm md:text-base">Factory-trained specialists
+                                    operating with clinical precision.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cyber-card group">
+                        <div
+                            class="cyber-card-inner p-5 md:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                            <div
+                                class="font-display font-medium text-4xl md:text-5xl text-outline group-hover:text-copper transition-colors">
+                                02</div>
+                            <div>
+                                <h4 class="font-display font-medium text-xl md:text-2xl mb-1">Micrometer Calibration</h4>
+                                <p class="opacity-70 font-medium text-sm md:text-base">We invest in the latest
+                                    specialized OEM calibration tooling.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative reveal delay-100 h-[400px] sm:h-[500px] lg:h-[650px] cyber-card rounded-[32px] w-full">
+                <div
+                    class="cyber-card-inner p-2 relative overflow-hidden h-full bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                    <img src="https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&q=80&w=1000"
+                        class="w-full h-full object-cover rounded-[22px] opacity-85 transition-all duration-700"
+                        alt="Precision tools">
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div
+                            class="w-48 h-48 md:w-64 md:h-64 border border-copper/30 rounded-full flex items-center justify-center">
+                            <div
+                                class="w-32 h-32 md:w-48 md:h-48 border border-copper/10 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
+                                <div class="w-2 h-2 bg-copper rounded-full absolute top-0 shadow-[0_0_10px_#FF5A1F]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Deployment Phases -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 text-center w-full">
+            <div class="reveal mb-12 md:mb-24">
+                <h2 class="font-display font-medium text-5xl sm:text-6xl md:text-[6rem] text-inherit">DEPLOYMENT <br
+                        class="sm:hidden"><span class="text-copper glow-text">PHASES</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative pb-20">
+                <div class="cyber-card group reveal text-center lg:mt-0 relative z-10">
+                    <div
+                        class="cyber-card-inner p-8 md:p-10 h-full bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div
+                            class="font-display font-medium text-[4rem] md:text-[6rem] text-outline group-hover:text-copper leading-none mb-4 md:mb-6 transition-colors">
+                            I</div>
+                        <h4 class="font-display font-medium text-2xl md:text-3xl mb-2 md:mb-3">INITIALIZE</h4>
+                        <p class="opacity-70 font-medium text-sm md:text-base">Secure your bay via the digital portal.
+                        </p>
+                    </div>
+                </div>
+                <div class="cyber-card group reveal text-center delay-100 lg:mt-8 relative z-10">
+                    <div
+                        class="cyber-card-inner p-8 md:p-10 h-full bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div
+                            class="font-display font-medium text-[4rem] md:text-[6rem] text-outline group-hover:text-copper leading-none mb-4 md:mb-6 transition-colors">
+                            II</div>
+                        <h4 class="font-display font-medium text-2xl md:text-3xl mb-2 md:mb-3">SCAN</h4>
+                        <p class="opacity-70 font-medium text-sm md:text-base">Full digital telemetry and visual
+                            teardown.</p>
+                    </div>
+                </div>
+                <div class="cyber-card group reveal text-center sm:delay-0 lg:delay-200 lg:mt-16 relative z-10">
+                    <div
+                        class="cyber-card-inner p-8 md:p-10 h-full bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div
+                            class="font-display font-medium text-[4rem] md:text-[6rem] text-outline group-hover:text-copper leading-none mb-4 md:mb-6 transition-colors">
+                            III</div>
+                        <h4 class="font-display font-medium text-2xl md:text-3xl mb-2 md:mb-3">EXECUTE</h4>
+                        <p class="opacity-70 font-medium text-sm md:text-base">Clinical execution of parameters and
+                            testing.</p>
+                    </div>
+                </div>
+                <div class="cyber-card group reveal text-center delay-100 lg:delay-300 lg:mt-24 relative z-10">
+                    <div
+                        class="cyber-card-inner p-8 md:p-10 h-full bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div
+                            class="font-display font-medium text-[4rem] md:text-[6rem] text-outline group-hover:text-copper leading-none mb-4 md:mb-6 transition-colors">
+                            IV</div>
+                        <h4 class="font-display font-medium text-2xl md:text-3xl mb-2 md:mb-3">LAUNCH</h4>
+                        <p class="opacity-70 font-medium text-sm md:text-base">Machine returns 100% precision
+                            analytics ready.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: Telemetry Data (Reviews) -->
+        <section class="px-4 md:px-6 lg:px-12 mb-24 lg:mb-40 grid lg:grid-cols-12 gap-10 md:gap-12 items-center w-full">
+            <div class="lg:col-span-4 reveal text-inherit">
+                <h2 class="font-display font-medium text-5xl sm:text-6xl md:text-[6rem] mb-6 md:mb-8 leading-[0.9]">RIDER
+                    <br><span class="text-copper">TELEMETRY.</span>
+                </h2>
+                <a href="reviews.html"
+                    class="magnetic-btn border border-obsidian/20 dark:border-white/20 font-display font-medium text-lg md:text-xl px-8 py-3 md:px-10 md:py-4 rounded-full hover:border-copper dark:hover:border-copper transition-colors inline-block w-full text-center sm:w-auto text-inherit">ACCESS
+                    ALL DATA</a>
+            </div>
+
+            <div class="lg:col-span-8 flex gap-6 md:gap-8 overflow-x-auto pb-8 scrollbar-hide snap-x w-full">
+                <!-- Log 1 -->
+                <div
+                    class="min-w-[280px] sm:min-w-[340px] md:min-w-[480px] cyber-card snap-center reveal flex-shrink-0">
+                    <div
+                        class="cyber-card-inner p-8 md:p-12 h-full flex flex-col justify-between bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div>
+                            <div
+                                class="text-copper mb-6 text-2xl md:text-4xl font-display font-medium tracking-widest glow-text">
+                                5.0 SYS.RATING</div>
+                            <p class="text-base md:text-xl opacity-90 mb-8 md:mb-10 leading-relaxed font-mono">
+                                "Diagnostic systems found the electrical fault instantly. Transparent execution."</p>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 border-t border-obsidian/10 dark:border-white/10 pt-6 md:pt-8 transition-colors">
+                            <div>
+                                <div class="font-display font-medium text-lg md:text-2xl">ARUN K.</div>
+                                <div
+                                    class="tracking-widest text-copper font-display font-medium uppercase mt-1 text-xs md:text-sm">
+                                    Street Triple 765</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Log 2 -->
+                <div
+                    class="min-w-[280px] sm:min-w-[340px] md:min-w-[480px] cyber-card snap-center reveal delay-100 flex-shrink-0">
+                    <div
+                        class="cyber-card-inner p-8 md:p-12 h-full flex flex-col justify-between bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                        <div>
+                            <div
+                                class="text-copper mb-6 text-2xl md:text-4xl font-display font-medium tracking-widest glow-text">
+                                5.0 SYS.RATING</div>
+                            <p class="text-base md:text-xl opacity-90 mb-8 md:mb-10 leading-relaxed font-mono">
+                                "Unmatched precision on the Desmo service. It feels like a laboratory, not a garage."
+                            </p>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 border-t border-obsidian/10 dark:border-white/10 pt-6 md:pt-8 transition-colors">
+                            <div>
+                                <div class="font-display font-medium text-lg md:text-2xl">SARAH J.</div>
+                                <div
+                                    class="tracking-widest text-copper font-display font-medium uppercase mt-1 text-xs md:text-sm">
+                                    Panigale V4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: Final CTA -->
+        <section class="px-4 md:px-6 lg:px-12 text-center max-w-5xl mx-auto reveal mb-10 md:mb-20 w-full">
+            <div class="cyber-card rounded-[32px] md:rounded-[48px] w-full">
+                <div
+                    class="cyber-card-inner p-8 sm:p-12 md:p-20 relative overflow-hidden flex flex-col items-center bg-white dark:bg-gunmetal text-obsidian dark:text-ivory border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
+                    <div
+                        class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,90,31,0.1)_0%,transparent_70%)] pointer-events-none">
+                    </div>
+
+                    <h2
+                        class="font-display font-medium text-5xl sm:text-6xl md:text-[6rem] lg:text-[8rem] mb-8 md:mb-14 leading-[0.9] relative z-10 w-full break-words">
+                        ACTIVATE <br>YOUR <span class="text-outline">SERVICE.</span>
+                    </h2>
+
+                    <div
+                        class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-6 mb-8 md:mb-10 relative z-10 w-full">
+                        <a href="signup.html"
+                            class="magnetic-btn btn-neon font-display font-medium text-2xl md:text-3xl tracking-wider px-10 py-5 md:px-16 md:py-6 rounded-full w-full sm:w-auto text-obsidian bg-copper border-0">
+                            BOOK A SERVICE
+                        </a>
+                    </div>
+
+                    <p class="opacity-70 font-mono text-xs md:text-sm relative z-10 tracking-widest uppercase w-full">
+                        System grants complimentary 15-point inspection.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- COMPLETE BULLETPROOF FOOTER -->
+    <footer
+        class="border-t border-obsidian/20 dark:border-ivory/20 pt-16 md:pt-20 pb-8 md:pb-12 px-4 md:px-6 lg:px-12 relative z-10 bg-ivory dark:bg-obsidian w-full mt-auto text-obsidian dark:text-ivory transition-colors duration-500">
+        <div
+            class="max-w-atelier mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 border-b border-obsidian/10 dark:border-ivory/10 pb-12 md:pb-16">
+            <div class="col-span-1 sm:col-span-2">
+                <a href="index.html" class="flex items-center gap-4 mb-6 w-fit group text-inherit">
+                    <svg viewBox="0 0 100 100"
+                        class="h-10 md:h-12 w-auto group-hover:scale-105 transition-transform duration-300">
+                        <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none" stroke="currentColor"
+                            stroke-width="6" stroke-linejoin="round" />
+                        <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="currentColor" fill-opacity="0.1"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="#FF5A1F" />
+                    </svg>
+                    <div class="flex flex-col">
+                        <span
+                            class="font-display font-medium text-3xl md:text-4xl tracking-wide leading-none text-inherit">TORQUECRAFT</span>
+                        <span class="font-display font-medium text-xs tracking-widest text-copper uppercase mt-2">Moto
+                            Atelier</span>
+                    </div>
+                </a>
+                <p class="opacity-70 max-w-sm mb-8 text-base md:text-lg font-medium">Precision motorcycle service,
+                    performance tuning, and custom fabrication for riders who demand engineering perfection.</p>
+
+                <!-- SOCIAL MEDIA LINKS -->
+                <div class="flex gap-4">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 border border-obsidian/20 dark:border-ivory/20 rounded-full flex items-center justify-center hover:bg-copper hover:border-copper hover:text-obsidian dark:hover:text-obsidian transition-colors"
+                        aria-label="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-display font-medium text-xl md:text-2xl mb-6 md:mb-8 uppercase opacity-50">Workshop</h4>
+                <ul class="space-y-3 md:space-y-4 text-base md:text-lg font-medium opacity-80">
+                    <li><a href="services.html" class="hover:text-copper transition-colors">All Services</a></li>
+                    <li><a href="pricing.html" class="hover:text-copper transition-colors">Pricing & Plans</a></li>
+                    <li><a href="about.html" class="hover:text-copper transition-colors">The Atelier</a></li>
+                    <li><a href="contact.html" class="hover:text-copper transition-colors">Book an Appointment</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-display font-medium text-xl md:text-2xl mb-6 md:mb-8 uppercase opacity-50">Contact</h4>
+                <ul class="space-y-3 md:space-y-4 text-base md:text-lg font-medium opacity-80">
+                    <li class="opacity-80">100 Precision Way<br>Moto District, NY 10001</li>
+                    <li><a href="tel:+15550100" class="hover:text-copper transition-colors font-medium">+1 (555)
+                            0100-MOTO</a></li>
+                    <li><a href="mailto:service@torquecraft.com"
+                            class="hover:text-copper transition-colors break-all">service@torquecraft.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-atelier mx-auto pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-display tracking-widest font-medium opacity-50 text-center md:text-left gap-4 md:gap-0">
+            <p>&copy; 2026 TORQUECRAFT MOTO ATELIER. PRECISION ENGINEERED.</p>
+            <div class="flex flex-wrap justify-center md:justify-end gap-4 md:gap-8">
+                <a href="#" class="hover:text-copper hover:opacity-100 transition-all">PRIVACY POLICY</a>
+                <a href="#" class="hover:text-copper hover:opacity-100 transition-all">TERMS OF SERVICE</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700&display=swap');
+
+@property --bg-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+:root {
+    --obsidian: #050608;
+    --gunmetal: #12151A;
+    --ivory: #F5F0E8;
+    --copper: #FF5A1F;
+    --copper-glow: rgba(255, 90, 31, 0.5);
+
+    /* Default Dark Theme Variables */
+    --bg-color: var(--obsidian);
+    --text-primary: #F5F0E8;
+    --text-secondary: #A5ABB3;
+    --nav-shadow: 6px 6px 16px #060708, -6px -6px 16px #0e0f12;
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+html.light {
+    /* Light Theme Variables */
+    --bg-color: var(--ivory);
+    --text-primary: #0A0B0D;
+    --text-secondary: #6F747A;
+    --nav-shadow: 6px 6px 16px #d1cdc6, -6px -6px 16px #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-color);
+    transition: background-color 0.4s ease;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--text-primary);
+    transition: color 0.4s ease;
+}
+
+.font-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+}
+
+/* HIDE SCROLLBAR FIX */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* 1. DYNAMIC NETWORK CANVAS */
+#particle-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    background: radial-gradient(circle at center, #0B0E14 0%, var(--obsidian) 100%);
+}
+
+html.light #particle-canvas {
+    background: radial-gradient(circle at center, #FFFFFF 0%, var(--ivory) 100%);
+}
+
+/* 2. TEXT STROKES & TYPOGRAPHY */
+.text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--text-primary);
+    opacity: 0.8;
+}
+
+html.light .text-outline {
+    -webkit-text-stroke: 1.5px var(--text-primary);
+    opacity: 1;
+}
+
+.glow-text {
+    text-shadow: 0 0 30px var(--copper-glow);
+}
+
+/* 3. NEUMORPHIC NAVBAR */
+.nav-neumorphic {
+    background: var(--bg-color);
+    border-radius: 9999px;
+    box-shadow: var(--nav-shadow);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s ease;
+}
+
+/* 4. SPINNING CYBER-BENTO CARDS */
+@keyframes spin-gradient {
+    to {
+        --bg-angle: 360deg;
+    }
+}
+
+.cyber-card {
+    position: relative;
+    background: rgba(18, 21, 26, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 24px;
+    padding: 2px;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+    z-index: 1;
+}
+
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    background: conic-gradient(from var(--bg-angle), transparent 20%, var(--copper) 80%, transparent 100%);
+    animation: spin-gradient 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.cyber-card-inner {
+    background: rgba(18, 21, 26, 0.85);
+    border-radius: 22px;
+    height: 100%;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html.light .cyber-card {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+html.light .cyber-card-inner {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    .cyber-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--copper-glow);
+    }
+}
+
+.cyber-card:hover::before {
+    opacity: 1;
+}
+
+/* 5. BUTTONS & UI */
+.clip-edges {
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+}
+
+.btn-neon {
+    background: var(--copper);
+    color: #0A0B0D !important;
+    box-shadow: 0 0 20px var(--copper-glow);
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-neon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.btn-neon:hover {
+    box-shadow: 0 0 40px var(--copper);
+}
+
+.btn-neon:hover::after {
+    left: 150%;
+}
+
+.btn-neon:active {
+}
+
+/* 6. GSAP-STYLE SCROLL REVEALS */
+@media (prefers-reduced-motion: no-preference) {
+    .reveal {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .delay-100 {
+        transition-delay: 100ms;
+    }
+
+    .delay-200 {
+        transition-delay: 200ms;
+    }
+}/* Dynamic Tailwind Class Injections for Layout Fixes */
+@media (min-width: 1024px) {
+  .lg\:mt-8 { margin-top: 2rem !important; }
+  .lg\:mt-16 { margin-top: 4rem !important; }
+  .lg\:mt-24 { margin-top: 6rem !important; }
+}
+@media (min-width: 1280px) {
+  .xl\:flex { display: flex !important; }
+  .xl\:hidden { display: none !important; }
+  .xl\:gap-6 { gap: 1.5rem !important; }
+}

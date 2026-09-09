@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TorqueCraft | Sign In</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z' fill='none' stroke='%23FF5A1F' stroke-width='8'/><path d='M35 40 H65 V52 H54 V75 H46 V52 H35 Z' fill='%23FF5A1F'/></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { obsidian: '#050608', gunmetal: '#12151A', ivory: '#F5F0E8', copper: '#FF5A1F' },
+                    fontFamily: { display: ["Barlow Condensed", "sans-serif"], sans: ["Manrope", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+
+    <!-- Anti-Flash Dark Mode Script -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+
+        .delay-400 {
+            animation-delay: 400ms;
+        }
+
+        .ambient-zoom {
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.08);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="antialiased selection:bg-copper selection:text-obsidian bg-ivory dark:bg-obsidian text-obsidian dark:text-ivory transition-colors duration-500 m-0 p-0">
+
+    <!-- Wrapper forces background to stretch and fixes the "Black Bar" issue -->
+    <div class="flex flex-col lg:flex-row min-h-screen w-full">
+
+        <!-- LEFT COLUMN: Image -->
+        <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-obsidian">
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1920&q=80"
+                class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity ambient-zoom"
+                alt="Motorcycle Garage">
+            <div class="absolute inset-0 bg-gradient-to-r from-obsidian/90 to-transparent pointer-events-none"></div>
+            <div class="absolute bottom-12 left-12 max-w-md fade-in-up">
+                <h2 class="font-display font-medium text-5xl text-white mb-4 drop-shadow-lg">ACCESS THE <br><span
+                        class="text-copper">ATELIER.</span></h2>
+                <p class="text-gray-300 font-medium opacity-90 leading-relaxed">Sign in to review your telemetry data,
+                    track your service bay status, and schedule future appointments.</p>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Sign In Form -->
+        <div
+            class="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12 relative bg-ivory dark:bg-obsidian transition-colors duration-500">
+
+            <!-- Top Utility Bar: Back, RTL & Theme -->
+            <div
+                class="absolute top-6 left-6 right-6 md:top-8 md:left-8 md:right-12 flex justify-between items-center z-10 fade-in-up">
+                <a href="index.html"
+                    class="flex items-center gap-2 font-display font-medium tracking-widest text-sm uppercase text-obsidian/70 dark:text-ivory/70 hover:text-copper dark:hover:text-copper transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Return Home
+                </a>
+                <div class="flex items-center gap-3">
+                    <button id="rtl-toggle"
+                        class="font-display text-xs md:text-sm tracking-widest hover:text-copper transition-colors border border-obsidian/20 dark:border-ivory/20 px-2.5 py-1 rounded opacity-70 uppercase text-obsidian/70 dark:text-ivory/70">RTL</button>
+                    <button id="theme-toggle"
+                        class="text-obsidian/70 dark:text-ivory/70 hover:text-copper dark:hover:text-copper transition-colors"
+                        aria-label="Toggle Theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5">
+                            <path
+                                d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="max-w-md w-full mx-auto relative z-10 pt-10">
+                <!-- Logo -->
+                <a href="index.html"
+                    class="flex items-center justify-center gap-3 text-obsidian dark:text-ivory mb-12 fade-in-up delay-100 transition-colors duration-500">
+                    <svg viewBox="0 0 100 100" class="h-10 w-auto">
+                        <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none" stroke="currentColor"
+                            stroke-width="6" stroke-linejoin="round" />
+                        <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="currentColor" fill-opacity="0.1"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="#FF5A1F" />
+                    </svg>
+                    <div class="flex flex-col">
+                        <span class="font-display font-medium text-2xl tracking-wide leading-none">TORQUECRAFT</span>
+                        <span
+                            class="font-display font-medium text-[9px] tracking-widest text-copper uppercase mt-1">Moto
+                            Atelier</span>
+                    </div>
+                </a>
+
+                <div class="fade-in-up delay-200 text-center">
+                    <h1
+                        class="font-display font-medium text-3xl md:text-4xl mb-2 text-obsidian dark:text-ivory transition-colors">
+                        WELCOME BACK</h1>
+                    <p class="text-obsidian/60 dark:text-ivory/60 mb-8 font-medium transition-colors">Establish a secure
+                        link to your digital passport.</p>
+                </div>
+
+                <form action="#" method="POST" class="space-y-5 fade-in-up delay-300">
+                    <div class="flex flex-col gap-2">
+                        <label
+                            class="font-mono text-xs tracking-widest uppercase text-obsidian/70 dark:text-ivory/70 transition-colors">Telemetry
+                            Email</label>
+                        <input type="email" placeholder="rider@domain.com"
+                            class="w-full rounded-xl px-5 py-3.5 font-medium text-sm bg-transparent border border-obsidian/20 dark:border-ivory/20 text-obsidian dark:text-ivory placeholder-obsidian/40 dark:placeholder-ivory/40 focus:border-copper focus:ring-1 focus:ring-copper outline-none transition-all"
+                            required>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-between items-center">
+                            <label
+                                class="font-mono text-xs tracking-widest uppercase text-obsidian/70 dark:text-ivory/70 transition-colors">Passcode</label>
+                            <a href="#"
+                                class="font-mono text-[10px] tracking-widest uppercase text-copper hover:underline">Forgot?</a>
+                        </div>
+                        <input type="password" placeholder="••••••••"
+                            class="w-full rounded-xl px-5 py-3.5 font-medium text-sm tracking-widest bg-transparent border border-obsidian/20 dark:border-ivory/20 text-obsidian dark:text-ivory placeholder-obsidian/40 dark:placeholder-ivory/40 focus:border-copper focus:ring-1 focus:ring-copper outline-none transition-all"
+                            required>
+                    </div>
+
+                    <button type="submit"
+                        class="magnetic-btn btn-neon font-display font-medium text-lg w-full py-4 rounded-xl flex justify-center uppercase tracking-widest mt-6 border-0 text-obsidian bg-copper">
+                        SIGN IN
+                    </button>
+                </form>
+
+                <div class="flex items-center gap-4 my-8 fade-in-up delay-400">
+                    <div class="h-px bg-obsidian/10 dark:bg-ivory/10 flex-grow transition-colors"></div>
+                    <span
+                        class="font-mono text-xs uppercase tracking-widest text-obsidian/40 dark:text-ivory/40 transition-colors">OR
+                        CONNECT VIA</span>
+                    <div class="h-px bg-obsidian/10 dark:bg-ivory/10 flex-grow transition-colors"></div>
+                </div>
+
+                <!-- Social Logins -->
+                <div class="grid grid-cols-3 gap-4 fade-in-up delay-400">
+                    <a href="https://google.com" target="_blank"
+                        class="h-12 rounded-xl border border-obsidian/20 dark:border-ivory/20 text-obsidian dark:text-ivory flex items-center justify-center hover:border-copper hover:text-copper dark:hover:text-copper transition-colors"
+                        aria-label="Google">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.333.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/>
+                        </svg>
+                    </a>
+                    <a href="https://apple.com" target="_blank"
+                        class="h-12 rounded-xl border border-obsidian/20 dark:border-ivory/20 text-obsidian dark:text-ivory flex items-center justify-center hover:border-copper hover:text-copper dark:hover:text-copper transition-colors"
+                        aria-label="Apple">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 384 512" fill="currentColor">
+                            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                        </svg>
+                    </a>
+                    <a href="index.html"
+                        class="h-12 rounded-xl border border-obsidian/20 dark:border-ivory/20 flex items-center justify-center hover:border-copper hover:text-copper transition-colors text-copper"
+                        aria-label="Website Link">
+                        <svg viewBox="0 0 100 100" class="h-6 w-auto">
+                            <path d="M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z" fill="none"
+                                stroke="currentColor" stroke-width="6" stroke-linejoin="round" />
+                            <path d="M35 40 H65 V52 H54 V75 H46 V52 H35 Z" fill="currentColor" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="text-center mt-10 fade-in-up delay-400">
+                    <p class="text-obsidian/60 dark:text-ivory/60 text-sm font-medium transition-colors">Don't have a
+                        service profile? <a href="signup.html" class="text-copper font-medium hover:underline">Register
+                            Here</a></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- main.js automatically hooks up the RTL and theme toggle functionality -->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html> 
