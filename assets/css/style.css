@@ -22,6 +22,7 @@
     --glass-border: rgba(255, 255, 255, 0.05);
 }
 
+html:not(.dark),
 html.light {
     /* Light Theme Variables */
     --bg-color: var(--ivory);
@@ -74,6 +75,7 @@ body {
     background: radial-gradient(circle at center, #0B0E14 0%, var(--obsidian) 100%);
 }
 
+html:not(.dark) #particle-canvas,
 html.light #particle-canvas {
     background: radial-gradient(circle at center, #FFFFFF 0%, var(--ivory) 100%);
 }
@@ -85,6 +87,7 @@ html.light #particle-canvas {
     opacity: 0.8;
 }
 
+html:not(.dark) .text-outline,
 html.light .text-outline {
     -webkit-text-stroke: 1.5px var(--text-primary);
     opacity: 1;
@@ -141,10 +144,12 @@ html.light .text-outline {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+html:not(.dark) .cyber-card,
 html.light .cyber-card {
     background: rgba(255, 255, 255, 0.5);
 }
 
+html:not(.dark) .cyber-card-inner,
 html.light .cyber-card-inner {
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.1);

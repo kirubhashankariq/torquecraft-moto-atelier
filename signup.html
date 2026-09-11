@@ -30,6 +30,9 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css">
@@ -231,7 +234,7 @@
         <!-- RIGHT COLUMN: Image -->
         <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-obsidian order-first lg:order-last">
             <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=2560&q=80"
-                class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity ambient-zoom"
+                class="absolute inset-0 w-full h-full object-cover opacity-95 ambient-zoom"
                 alt="Motorcycle Tools">
             <div
                 class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-obsidian/90 to-transparent pointer-events-none">

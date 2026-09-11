@@ -31,6 +31,9 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
     </script>
 
     <style>
@@ -270,12 +273,12 @@
         <section
             class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 md:px-6 lg:px-12 flex flex-col justify-center min-h-[70vh]">
             <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=2560&q=80"
-                class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-70 z-0"
+                class="absolute inset-0 w-full h-full object-cover opacity-90 lg:opacity-95 z-0"
                 alt="Workshop Setup">
 
-            <!-- FIXED: Gradient from 'bg-color' bug to adaptively use Ivory/Obsidian -->
+            <!-- Adaptive text contrast gradient protecting text while keeping motorcycle crystal clear -->
             <div
-                class="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/50 dark:from-obsidian dark:via-obsidian/50 to-transparent z-0 transition-colors duration-500">
+                class="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/80 dark:from-obsidian dark:via-obsidian/80 to-transparent z-0 transition-colors duration-500 lg:w-3/4">
             </div>
 
             <div class="relative z-10 w-full max-w-atelier mx-auto flex flex-col lg:flex-row items-center gap-12">

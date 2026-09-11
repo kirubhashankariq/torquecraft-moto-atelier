@@ -29,6 +29,9 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
     </script>
 
     <style>
@@ -277,11 +280,11 @@
                 <div
                     class="cyber-card-inner relative overflow-hidden flex items-end justify-center h-full border border-obsidian/10 dark:border-white/10 rounded-[24px] lg:rounded-[32px]">
                     <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=2560&q=80"
-                        class="absolute inset-0 w-full h-full object-cover opacity-85 hover:scale-105 transition-all duration-700"
+                        class="absolute inset-0 w-full h-full object-cover opacity-95 hover:scale-105 transition-all duration-700"
                         alt="Luxury Sports Motorcycle">
 
                     <div
-                        class="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/30 dark:from-obsidian dark:via-obsidian/30 to-transparent">
+                        class="absolute inset-0 bg-gradient-to-t from-ivory/80 via-transparent to-transparent dark:from-obsidian/80 dark:via-transparent dark:to-transparent">
                     </div>
 
                     <div
@@ -375,10 +378,10 @@
                     <a href="service-details.html?id=engine"
                         class="cyber-card-inner p-6 md:p-12 flex flex-col justify-end relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                         <img src="https://i.pinimg.com/1200x/7a/68/93/7a689369659d6feae2ffab49e8930fb6.jpg"
-                            class="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-700"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                             alt="Motorcycle engineering">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/40 dark:from-obsidian dark:via-obsidian/50 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/50 dark:to-transparent z-0">
                         </div>
 
                         <div class="relative z-10">
@@ -412,10 +415,10 @@
                     <a href="service-details.html?id=fluids"
                         class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                         <img src="https://i.pinimg.com/236x/92/36/7b/92367b6e013e3aacff7af3b12de2abb9.jpg"
-                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 z-0"
                             alt="Motorcycle engine detail">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/60 dark:to-transparent z-0">
                         </div>
 
                         <div
@@ -442,10 +445,10 @@
                     <a href="service-details.html?id=diagnostics"
                         class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                         <img src="https://i.pinimg.com/736x/20/46/59/204659c265461a52b4803001e8318441.jpg"
-                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 z-0"
                             alt="Motorcycle diagnostics">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/60 dark:to-transparent z-0">
                         </div>
 
                         <div
@@ -534,7 +537,7 @@
                 <div
                     class="cyber-card-inner p-2 relative overflow-hidden h-full bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                     <img src="https://i.pinimg.com/736x/60/e0/2c/60e02ce0bfea35f5d9409f59b0579957.jpg"
-                        class="w-full h-full object-cover rounded-[22px] opacity-85 transition-all duration-700"
+                        class="w-full h-full object-cover rounded-[22px] opacity-95 transition-all duration-700"
                         alt="Precision tools">
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div

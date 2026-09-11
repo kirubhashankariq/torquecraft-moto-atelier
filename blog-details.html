@@ -126,6 +126,9 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
     </script>
 </head>
 
@@ -333,7 +336,7 @@
                             class="w-full h-full rounded-[20px] overflow-hidden relative border border-obsidian/10 dark:border-white/10">
                             <img id="ui-image"
                                 src="https://i.pinimg.com/1200x/8d/2d/52/8d2d521084e846129af08bd8f377f24b.jpg"
-                                class="w-full h-full object-cover mix-blend-luminosity" alt="Article Hero">
+                                class="w-full h-full object-cover" alt="Article Hero">
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-ivory dark:from-obsidian via-transparent to-transparent">
                             </div>

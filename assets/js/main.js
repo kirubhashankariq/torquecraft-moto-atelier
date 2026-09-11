@@ -83,8 +83,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggles = document.querySelectorAll('#theme-toggle, #mobile-theme-toggle, [data-theme]');
     const rtlToggles = document.querySelectorAll('#rtl-toggle, #mobile-rtl-toggle, [data-dir]');
 
+    // Function to update RTL toggle labels based on current direction
+    const updateRtlLabels = () => {
+        const isRtl = htmlEl.getAttribute('dir') === 'rtl';
+        rtlToggles.forEach(btn => {
+            if (btn.textContent && btn.textContent.includes('MODE')) {
+                btn.textContent = isRtl ? 'LTR MODE' : 'RTL MODE';
+            } else {
+                btn.textContent = isRtl ? 'LTR' : 'RTL';
+            }
+        });
+    };
+
     // Initialize RTL on load
-    if (localStorage.getItem('dir') === 'rtl') htmlEl.setAttribute('dir', 'rtl');
+    if (localStorage.getItem('dir') === 'rtl') {
+        htmlEl.setAttribute('dir', 'rtl');
+    }
+    updateRtlLabels();
 
     // Theme Toggle Logic
     themeToggles.forEach(btn => {
@@ -98,8 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
     rtlToggles.forEach(btn => {
         btn.addEventListener('click', () => {
             const isRtl = htmlEl.getAttribute('dir') === 'rtl';
-            htmlEl.setAttribute('dir', isRtl ? 'ltr' : 'rtl');
-            localStorage.setItem('dir', isRtl ? 'ltr' : 'rtl');
+            const nextDir = isRtl ? 'ltr' : 'rtl';
+            htmlEl.setAttribute('dir', nextDir);
+            localStorage.setItem('dir', nextDir);
+            updateRtlLabels();
         });
     });
 

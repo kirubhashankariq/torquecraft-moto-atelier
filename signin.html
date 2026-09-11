@@ -22,12 +22,15 @@
         }
     </script>
 
-    <!-- Anti-Flash Dark Mode Script -->
+    <!-- Anti-Flash Script for Theme & RTL -->
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
+        }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
         }
     </script>
 
@@ -92,7 +95,7 @@
         <!-- LEFT COLUMN: Image -->
         <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-obsidian">
             <img src="https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=2560&q=80"
-                class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity ambient-zoom"
+                class="absolute inset-0 w-full h-full object-cover opacity-95 ambient-zoom"
                 alt="Motorcycle Garage">
             <div class="absolute inset-0 bg-gradient-to-r from-obsidian/90 to-transparent pointer-events-none"></div>
             <div class="absolute bottom-12 left-12 max-w-md fade-in-up">

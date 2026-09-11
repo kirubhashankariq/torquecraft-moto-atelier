@@ -29,6 +29,9 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        if (localStorage.getItem('dir') === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
     </script>
     <style>
         /* FIXED: Fade-in without 'transform' so the Fixed Navbar stays perfectly in place */
@@ -260,10 +263,10 @@
                 <div
                     class="cyber-card-inner relative overflow-hidden flex items-end justify-center border border-obsidian/10 dark:border-white/10 rounded-[24px] lg:rounded-[40px] h-full">
                     <img src="https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=2560&q=80"
-                        class="absolute inset-0 w-full h-full object-cover opacity-85 hover:scale-105 transition-all duration-700"
+                        class="absolute inset-0 w-full h-full object-cover opacity-95 hover:scale-105 transition-all duration-700"
                         alt="Motorcycle Dyno Tuning">
                     <div
-                        class="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/30 dark:from-obsidian dark:via-obsidian/30 to-transparent">
+                        class="absolute inset-0 bg-gradient-to-t from-ivory/80 via-transparent to-transparent dark:from-obsidian/80 dark:via-transparent dark:to-transparent">
                     </div>
 
                     <div
@@ -338,13 +341,13 @@
                 <div class="cyber-card md:col-span-2 md:row-span-2 group reveal h-[400px] md:h-auto">
                     <a href="service-details.html"
                         class="cyber-card-inner p-6 md:p-12 flex flex-col justify-end relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
-                        <!-- CRYSTAL CLEAR IMAGE: Opacity increased to 85% and no luminosity washout -->
+                        <!-- CRYSTAL CLEAR IMAGE: Opacity increased to 95% and no luminosity washout -->
                         <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=2560&q=80"
-                            class="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-700"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                             alt="Motorcycle Dyno Tuning">
                         <!-- Clean gradient overlay localized neatly at the bottom for text readability while keeping the image crisp & clear -->
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/40 dark:from-obsidian dark:via-obsidian/50 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/50 to-transparent z-0">
                         </div>
 
                         <div class="relative z-10">
@@ -376,10 +379,10 @@
                     <a href="service-details.html"
                         class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                         <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=2560&q=80"
-                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 z-0"
                             alt="Motorcycle exhaust">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/60 dark:to-transparent z-0">
                         </div>
                         <div
                             class="relative z-10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center text-copper bg-black/50 border border-white/10 backdrop-blur-md">
@@ -405,10 +408,10 @@
                     <a href="service-details.html"
                         class="cyber-card-inner p-6 md:p-8 flex flex-col justify-between h-[250px] md:h-full relative overflow-hidden bg-white dark:bg-gunmetal border border-obsidian/10 dark:border-white/10 transition-colors duration-500">
                         <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=2560&q=80"
-                            class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 z-0"
+                            class="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 z-0"
                             alt="Motorcycle suspension">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-obsidian dark:via-obsidian/70 to-transparent z-0">
+                            class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent dark:from-obsidian/95 dark:via-obsidian/60 dark:to-transparent z-0">
                         </div>
                         <div
                             class="relative z-10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center text-copper bg-black/50 border border-white/10 backdrop-blur-md">
